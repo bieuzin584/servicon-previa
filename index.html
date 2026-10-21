@@ -369,6 +369,7 @@ button:focus-visible,a:focus-visible,summary:focus-visible,[tabindex]:focus-visi
 .appointment-submit{width:100%;justify-content:space-between;background:var(--blue);color:#fff;font-size:14px;min-height:51px;border-radius:7px;padding:14px 19px}
 .appointment-submit:hover{background:#0039ad}
 .appointment-form>p{font-size:12px;line-height:1.75;color:#4f607b;margin:17px 0 0}
+.appointment-visible .mobile-contact,.appointment-visible .floating-contact{visibility:hidden;pointer-events:none}
 @media(max-width:1050px){.servicon-appointment-layout{gap:40px}.servicon-appointment h2{font-size:33px}.appointment-form{padding:27px}.appointment-fields{gap:13px}}
 @media(max-width:760px){.servicon-appointment{padding-block:54px}.servicon-appointment-layout{grid-template-columns:1fr;gap:27px}.servicon-appointment h2{font-size:32px;line-height:1.2}.servicon-appointment-intro>p{font-size:14px}.appointment-symbol{width:33px;height:33px;margin-bottom:17px}.appointment-form{padding:25px 21px}.appointment-fields{grid-template-columns:1fr;gap:17px;margin-bottom:22px}.appointment-fields input,.appointment-fields select{font-size:16px;min-height:49px}.appointment-submit{font-size:14px}.appointment-form>p{font-size:12px}}
 
@@ -742,6 +743,12 @@ if ('IntersectionObserver' in window) {
     return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
   }
   dateField.min = localToday();
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(entries => {
+      document.body.classList.toggle('appointment-visible', entries[0].isIntersecting);
+    }, {threshold: 0.1});
+    observer.observe(document.getElementById('agendamento'));
+  }
   dateField.addEventListener('input', () => dateField.setCustomValidity(''));
   form.addEventListener('submit', event => {
     event.preventDefault();
